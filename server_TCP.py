@@ -2,13 +2,14 @@ import socket
 import threading
 
 class my_thread(threading.Thread):
-	def __init__(self, addr, client):
+	def __init__(self, addr, client, function):
 		threading.Thread.__init__(self)
 		self.client = client
 		self.addr = addr
+		self.function = function
 
 	def run(self):
-		handle_client(self.client, self.addr)
+		self.function(self.client, self.addr)
 
 
 def handle_client(client_socket, addr):
@@ -47,5 +48,5 @@ if __name__ == '__main__':
 
 		print(f'[*] Conexão aceita de {addr[0]}:{addr[1]}')
 		
-		client_handler = my_thread(addr, client)
+		client_handler = my_thread(addr, client, handle_client)
 		client_handler.start()
